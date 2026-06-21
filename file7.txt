@@ -29,3 +29,7 @@ const [bg,setBg]=useState(#222222);
 </div>
 );
 }
+
+.pic{width:100px;height:100px;border-radius:50%;}
+.card{width:250px;padding:20px;text-align:center;border-radius:10px;box-shadow:0 4px 8px gray;}
+body,.App{margin:0;height:100vh:display:flex;justify-content:center;align-items:center;}
