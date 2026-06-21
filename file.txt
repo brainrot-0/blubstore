@@ -1,0 +1,127 @@
+.App{
+  text-align:center;
+  padding:20px;
+}
+
+form{
+  width:250px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+input{
+  padding:8px;
+}
+
+.error{
+  border:2px solid red;
+}
+
+p{
+  color:red;
+  margin:0;
+}
+
+.pass{
+  display:flex;
+  gap:5px;
+}
+
+import { useState } from "react";
+import "./App.css";
+
+const App = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+
+  const submit = (e) => {
+    e.preventDefault();
+
+    if (
+      name &&
+      email.includes("@") &&
+      email.includes(".") &&
+      password.length >= 6
+    ) {
+      alert(
+        `Name: ${name}\nEmail: ${email}\nPassword: ${password}`
+      );
+
+      setName("");
+      setEmail("");
+      setPassword("");
+      setShow(false);
+    }
+  };
+
+  return (
+    <div className="App">
+      <h2>Register Form</h2>
+
+      <form onSubmit={submit}>
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className={!name ? "error" : ""}
+        />
+        {!name && <p>Name Required</p>}
+
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className={
+            email && (!email.includes("@") || !email.includes("."))
+              ? "error"
+              : ""
+          }
+        />
+        {email &&
+          (!email.includes("@") || !email.includes(".")) && (
+            <p>Invalid Email</p>
+          )}
+
+        <div className="pass">
+          <input
+            type={show ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={
+              password && password.length < 6 ? "error" : ""
+            }
+          />
+
+          <button
+            type="button"
+            onClick={() => setShow(!show)}
+          >
+            {show ? "Hide" : "Show"}
+          </button>
+        </div>
+
+        {password && password.length < 6 && (
+          <p>Password must be 6 characters</p>
+        )}
+
+        <button
+          disabled={
+            !name ||
+            !email.includes("@") ||
+            !email.includes(".") ||
+            password.length < 6
+          }
+        >
+          Submit
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default App;
