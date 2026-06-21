@@ -1,0 +1,63 @@
+import { useState } from "react";
+
+const App = () => {
+  const [tasks, setTasks] = useState([]);
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [filter, setFilter] = useState("all");
+
+  return (
+    <div>
+      <h1>Task Reminder App</h1>
+
+      <form onSubmit={e => {
+        e.preventDefault();
+        if(taskName && taskDate){
+        setTasks([...tasks, { id: Date.now(), name:taskName, date:taskDate, done: false }]);
+        setTaskName("");
+        setTaskDate("");
+      }}>
+        <input
+          placeholder="Task"
+          value={taskName}
+          onChange={e => setTaskName(e.target.value)}
+        />
+        <br />
+
+        <input
+          type="date"
+          value={taskDate}
+          onChange={e => setTaskDate(e.target.value)}
+        />
+        <br />
+
+        <button>Add Task</button>
+      </form>
+
+      <select onChange={e => setFilter(e.target.value)}>
+        <option value="all">All</option>
+        <option value="done">Completed</option>
+        <option value="not">Incomplete</option>
+      </select>
+
+      {tasks
+        .filter(t => filter === "all" ? true : filter === "done" ? t.done : !t.done)
+        .map(t => (
+          <div key={t.id}>
+            <input
+              type="checkbox"
+              checked={t.done}
+              onChange={() =>
+                setTasks(tasks.map(x =>
+                  x.id === t.id ? { ...x, done: !x.done } : x
+                ))
+              }
+            />
+            {t.name} {t.date}
+          </div>
+        ))}
+    </div>
+  );
+};
+
+export default App;
