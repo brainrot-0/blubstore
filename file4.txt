@@ -1,0 +1,29 @@
+import { useState } from "react";
+function ToDoFunction() {
+const [tasks, setTasks] = useState([]);
+const [text, setText] = useState("");
+return (
+<div>
+<h2>To-Do List</h2>
+<input value={text} onChange={e => setText(e.target.value)} />
+<button onClick={() => {
+text && setTasks([...tasks, { text, done: false }]);
+setText("");
+}}>Add</button>
+<ul>
+{tasks.map((t, i) => (
+<li key={i} style={{ textDecoration: t.done ? "line-through" : "" }}>
+{t.text}
+<button onClick={() => {
+const copy = [...tasks];
+copy[i].done = !copy[i].done;
+setTasks(copy);
+}}>done</button>
+<button onClick={() => setTasks(tasks.filter((_, x) => x !== i))}>delete </button>
+</li>
+))}
+</ul>
+</div>
+);
+}
+export default ToDoFunction;
