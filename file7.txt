@@ -1,0 +1,31 @@
+import React from "react";
+import Profilecard from "./Profilecard";
+import "./App.css"
+export default function App(){
+  return (
+  <div className="App">
+  <Profilecard 
+    name="vtucircle"
+    bio="notes, syllabus,.. "
+    profilePicture="https/__ .png"/>
+  </div>
+);
+}
+
+import React, {useState} from "react";
+export default function Profilecard({name,bio,profilePicture}) {
+const [bg,setBg]=useState(#222222);
+<div className="card"
+      style={{background-color:bg}}
+      onMouseEnter={() => setBg(#010191)}
+      onMouseLeave={() => setBg(#010191)} >
+<img 
+  src={profilePicture}
+  alt={name}
+  className="pic" />
+
+<h2>{name}</h2>
+<p>{bio}</p>
+</div>
+);
+}
