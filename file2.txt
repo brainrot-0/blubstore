@@ -1,49 +1,14 @@
-In src/App.js,
-import React from "react";
-import Header from "./Header";
-import Footer from "./Footer";
-import "./App.css";
-function App() {
-return (
-<div className="container">
-<Header title="My First React App" /><br></br>
-<Footer
-tagline="Learning React Props"
-copyright="© 2026 My Website"
-/>
-</div>
-);
-}
-export default App; 2. Header Component (Child Component) Create a new file src/Header.js
-import React from 'react';
-function Header(props) {
-return (
-<header>
-<h1>{props.title}</h>
-</header> );
-}
-export default Header;
-3. Footer Component (Child Component) Create a new file src/Footer.js
-import React from "react";
-func on Footer(props) {
-return (
-<footer>
-<p >{props.tagline}</p>
-<p >{props.copyright}</p>
-</footer>
-);
-}
-export default Footer;
-Step 3: Add Some Basic Styles (app.css)
-.container { text-align: center;}
-header {
-color:dark blue; background-color: skyblue;}
-footer {padding: 20px;color:dark blue;background-color: skyblue;
-posi on: absolute;
-bo om: 0;
-width: 100%;
-font-size: 38px;
-} 
-
-
-npm start
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing
+data = fetch_california_housing()
+df = pd.DataFrame(data.data, columns=data.feature_names)
+df['Target'] = data.target # Add target column (house value)
+corr_matrix = df.corr()
+plt.figure(figsize=(10, 6))
+sns.heatmap(corr_matrix, annot=True, cmap="coolwarm", fmt=".2f", linewidths=0.5)
+plt.title("Correlation Matrix of California Housing Features")
+plt.show()
+sns.pairplot(df, diag_kind="kde", markers="o", plot_kws={'alpha':0.5})
+plt.show()
