@@ -1,90 +1,22 @@
-About.js
-import React from 'react';
-const About = () => {
-return (
-<div>
-<h2>About Page</h2>
-<p>Learn more about us on the About Page!</p>
-</div>
-); };
-export default About;
-Contact.js
-import React from 'react';
-const Contact = () => {
-return (
-<div>
-<h2>Contact Page</h2>
-<p>Get in touch with us through the Contact Page!</p>
-</div>
-);
-};
-export default Contact;
-Home.js
-import React from 'react';
-const Home = () => {
-return (
-<div>
-<h2>Home Page</h2>
-<p>Welcome to the Home Page!</p>
-</div>
-);
-};
-export default Home;
-Nav.js
-import React from 'react';
-import { Link } from 'react-router-dom';
-const Navbar = () => {
-return (
-<nav>
-<ul>
-<li><Link to="/">Home</Link></li>
-<li><Link to="/about">About</Link></li>
-<li><Link to="/contact">Contact</Link></li>
-</ul>
-</nav>
-);
-};
-export default Navbar;
-App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'; // Import
-Link here
-import Home from './components/Home';
-import About from './components/About';
-import Contact from './components/Contact';
-const App = () => {
-return (
-<Router>
- //<Navbar /> --- 
-<nav>
-<ul>
-<li><Link to="/">Home</Link></li>
-<li><Link to="/about">About</Link></li>
-<li><Link to="/contact">Contact</Link></li>
-</ul>
-</nav>
-
-<Routes>
-<Route path="/" element={<Home />} />
-<Route path="/about" element={<About />} />
-<Route path="/contact" element={<Contact />} />
-</Routes>
-</Router>
-);
-};
-export default App; APP.CSS
-nav ul {
-list-style-type: none;
-padding: 0;
-}
-nav ul li {
-display: inline;
-margin-right: 20px;
-}
-nav a {
-text-decoration: none;
-color: black;
-}
-nav a:hover {
-color: blue;
-}
+import numpy as np
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+faces_data = datasets.fetch_olivetti_faces(shuffle=True, random_state=42)
+X = faces_data.data
+y = faces_data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42)
+nb_classifier = GaussianNB()
+nb_classifier.fit(X_train, y_train)
+y_pred = nb_classifier.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy of Naive Bayes Classifier on Olivetti Face dataset: {accuracy * 100:.2f}%")
+fig, axes = plt.subplots(2, 5, figsize=(10, 5))
+axes = axes.ravel()
+for i in np.arange(10):
+    axes[i].imshow(X_test[i].reshape(64, 64), cmap='gray')
+    axes[i].set_title(f"Pred: {y_pred[i]}")
+    axes[i].axis('off')
+plt.show()
