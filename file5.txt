@@ -1,50 +1,37 @@
-FigureList.js
-import React, { useState } from "react";
-import BasicFigure from "./BasicFigure";
-const FigureList = () => {
-const [figures, setFigures] = useState([
-{ src: "https://picsum.photos/200?1", caption: "Image 1" },
-{ src: "https://picsum.photos/200?2", caption: "Image 2" }
-]);
-const addImage = () =>
-setFigures([...figures, { src: `https://picsum.photos/200?${figures.length+1}`, caption: `Image ${figures.length+1}` }]);
-const removeImage = i => setFigures(figures.filter((_, idx) => idx !== i));
-return (
-<div className="App">
-<h1>Gallery</h1>
-<button onClick={addImage}>Add Image</button>
-<div className="figure-list">
-{figures.map((f,i) => <BasicFigure key={i} src={f.src} caption={f.caption} remove={() => removeImage(i)} />)}
-</div>
-</div>
-);
-};
-export default FigureList;
-// src/BasicFigure.js
-import React from "react";
-const BasicFigure = ({ src, caption, remove }) => (
-<div className="figure">
-<img src={src} alt={caption} />
-<p>{caption}</p>
-<button onClick={remove}>Remove</button>
-</div>
-);
-export default BasicFigure;
-// src/App.js
-import React from "react";
-import FigureList from "./components/FigureList";
-import "./App.css";
-function App() {
-return <FigureList />;
-}
-export default App;
-App.css
-.App { text-align:center; }
-.figure-list { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-.figure { display:flex; flex-direction:column; align-items:center; transition:0.3s; }
-.figure:hover { transform:scale(1.05); }
-img { width:200px; height:150px; object-fit:cover; border-radius:8px; }
-p { font-weight:bold; margin:5px 0; }
-button { padding:5px 10px; border:none; background:#f44; color:white; border-radius:4px; cursor:pointer; }
-button:hover { background:#c00; }
-
+import numpy as np
+import matplotlib.pyplot as plt
+from collections import Counter
+def generate_data():
+    np.random.seed(42)
+    x = np.random.rand(100)
+    labels = np.array([1 if xi <= 0.5 else 1 for xi in x[:50]])
+    return x, labels
+def knn_classify(train_x, train_y, test_x, k):
+    predictions = []
+    for test_point in test_x:
+        distances = np.abs(train_x - test_point)
+        sorted_indices = np.argsort(distances)
+        nearest_labels = train_y[sorted_indices[:k]]
+        most_common = Counter(nearest_labels).most_common(1)[0][0]
+        predictions.append(most_common)
+    return np.array(predictions)
+def main():
+    x, labels = generate_data()
+    train_x, train_y = x[:50], labels
+    test_x = x[50:]
+    k_values = [1, 2, 3, 4, 5, 20, 30]
+    results = {}
+    for k in k_values:
+        predictions = knn_classify(train_x, train_y, test_x, k)
+        results[k] = predictions
+        print(f'k={k}, Predictions: {predictions}')
+    plt.figure(figsize=(10, 5))
+    plt.scatter(train_x, train_y, color='blue', label='Training Data')
+    plt.scatter(test_x, results[1], color='red', marker='x', label='Predictions (k=1)')
+    plt.xlabel('x values')
+    plt.ylabel('Class')
+    plt.title('KNN Classification Results')
+    plt.legend()
+    plt.show()
+if __name__ == "__main__":
+    main()
