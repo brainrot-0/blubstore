@@ -1,29 +1,15 @@
-import { useState } from "react";
-function ToDoFunction() {
-const [tasks, setTasks] = useState([]);
-const [text, setText] = useState("");
-return (
-<div>
-<h2>To-Do List</h2>
-<input value={text} onChange={e => setText(e.target.value)} />
-<button onClick={() => {
-text && setTasks([...tasks, { text, done: false }]);
-setText("");
-}}>Add</button>
-<ul>
-{tasks.map((t, i) => (
-<li key={i} style={{ textDecoration: t.done ? "line-through" : "" }}>
-{t.text}
-<button onClick={() => {
-const copy = [...tasks];
-copy[i].done = !copy[i].done;
-setTasks(copy);
-}}>done</button>
-<button onClick={() => setTasks(tasks.filter((_, x) => x !== i))}>delete </button>
-</li>
-))}
-</ul>
-</div>
-);
-}
-export default ToDoFunction;
+import csv
+with open('enjoysport.csv') as csvfile:
+    data = list(csv.reader(csvfile))
+num_attributes = len(data[0]) - 1
+hypothesis = ['0'] * num_attributes
+print("Initial Hypothesis:", hypothesis)
+for row in data:
+    if row[-1].lower() == 'yes':
+        for i in range(num_attributes):
+            if hypothesis[i] == '0':
+                hypothesis[i] = row[i]
+            elif hypothesis[i] != row[i]:
+                hypothesis[i] = '?'
+print("\nFinal Hypothesis:")
+print(hypothesis)
