@@ -1,16 +1,26 @@
-import { useState } from "react";
-function Counter() {
-const [count, setCount] = useState(0);
-const [step, setStep] = useState(1);
-return (
-<div>
-<h1>Counter: {count}</h1>
-<button onClick={() => count - step >= 0 && setCount(count - step)}>-</button>
-<button onClick={() => setCount(count + step)}>+</button>
-<button onClick={() => setCount(0)}>Reset</button>
-<br /><br />
-<input type="number" value={step} min="1" onChange={(e) => setStep(+e.target.value)} />
-</div>
-);
-}
-export default Counter;
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.preprocessing import StandardScaler
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+cov_matrix = np.cov(X_scaled.T)
+eigenvalues, eigenvectors = np.linalg.eig(cov_matrix)
+sorted_indices = np.argsort(eigenvalues)[::-1]
+eigenvalues = eigenvalues[sorted_indices]
+eigenvectors = eigenvectors[:, sorted_indices]
+pca_components = eigenvectors[:, :2]
+X_pca = X_scaled.dot(pca_components)
+plt.figure(figsize=(8, 6))
+for i, target_name in enumerate(iris.target_names):
+    plt.scatter(X_pca[y == i, 0], X_pca[y == i, 1], label=target_name)
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.title('PCA of Iris Dataset')
+plt.legend()
+plt.grid()
+plt.show()
